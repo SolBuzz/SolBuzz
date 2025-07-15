@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "SolBuzz - Advanced Token Sniping & Rugger Detection",
+  "version": "2.0.0",
+  "description": "Advanced Solana token sniping extension for PumpFun & Bonk with real-time rugger detection, developer reputation tracking, and lightning-fast fills",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "background",
+    "scripting",
+    "notifications",
+    "alarms",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://pump.fun/*",
+    "https://www.pump.fun/*",
+    "https://*.bonk.bot/*",
+    "https://api.bubblemaps.io/*",
+    "https://api.solana.fm/*",
+    "https://api.helius.xyz/*",
+    "https://mainnet-beta.solana.com/*",
+    "https://api.dexscreener.com/*",
+    "https://api.birdeye.so/*",
+    "https://public-api.solscan.io/*",
+    "https://api.rugcheck.xyz/*",
+    "https://api.coingecko.com/*",
+    "https://api.coinmarketcap.com/*",
+    "https://*.twitter.com/*",
+    "https://*.x.com/*",
+    "https://*.github.com/*",
+    "https://*.telegram.org/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pump.fun/*",
+        "https://www.pump.fun/*",
+        "https://*.bonk.bot/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SolBuzz - Advanced Token Sniping",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["utils/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+} 

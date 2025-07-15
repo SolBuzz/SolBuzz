@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolBuzz - Advanced Token Sniping</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+                  <img src="icons/icon48.png" alt="SolBuzz" class="logo" id="logo">
+      <h1>SolBuzz</h1>
+            <p class="subtitle">Advanced Token Sniping & Rugger Detection</p>
+        </header>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-label">Monitoring:</span>
+                <span class="status-value" id="monitoring-status">Active</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Targets:</span>
+                <span class="status-value" id="target-count">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Risk Level:</span>
+                <span class="status-value risk-indicator" id="risk-indicator">LOW</span>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="sniping-controls">
+                <div class="control-section">
+                    <h3>🎯 Sniping Controls</h3>
+                    <div class="control-row">
+                        <button id="auto-snipe-toggle" class="toggle-btn" data-enabled="false">
+                            <span class="toggle-icon">⚡</span>
+                            <span class="toggle-text">Auto-Snipe OFF</span>
+                        </button>
+                        <button id="quick-snipe-btn" class="action-btn primary">
+                            <span class="btn-icon">🚀</span>
+                            <span class="btn-text">Quick Snipe</span>
+                        </button>
+                    </div>
+                    
+                    <div class="amount-controls">
+                        <label for="snipe-amount">Snipe Amount (SOL):</label>
+                        <div class="amount-input-group">
+                            <input type="number" id="snipe-amount" value="0.1" min="0.01" max="10" step="0.01" class="amount-input">
+                            <div class="quick-amounts">
+                                <button class="quick-amount" data-amount="0.05">0.05</button>
+                                <button class="quick-amount" data-amount="0.1">0.1</button>
+                                <button class="quick-amount" data-amount="0.5">0.5</button>
+                                <button class="quick-amount" data-amount="1">1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <label for="token-address">Token Address or URL:</label>
+                <input 
+                    type="text" 
+                    id="token-address" 
+                    placeholder="Enter token address or paste PumpFun/Bonk URL"
+                    class="token-input"
+                >
+                <div class="input-buttons">
+                    <button id="analyze-btn" class="btn-primary">
+                        <span class="btn-text">Analyze Token</span>
+                        <div class="spinner" id="spinner"></div>
+                    </button>
+                    <button id="add-target-btn" class="btn-secondary">
+                        <span class="btn-text">Add Target</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="auto-detect-section">
+                <div class="feature-toggles">
+                    <div class="toggle-item">
+                        <input type="checkbox" id="auto-detect" checked>
+                        <label for="auto-detect">Auto-detect tokens on current page</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="auto-monitor" checked>
+                        <label for="auto-monitor">Auto-monitor detected tokens</label>
+                    </div>
+                    <div class="toggle-item">
+                        <input type="checkbox" id="rugger-alerts" checked>
+                        <label for="rugger-alerts">Critical rugger alerts</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="snipe-targets-section">
+                <div class="section-header">
+                    <h3>🎯 Active Targets</h3>
+                    <button id="clear-targets-btn" class="btn-text-link">Clear All</button>
+                </div>
+                <div class="targets-list" id="targets-list">
+                    <!-- Active snipe targets will appear here -->
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section">
+                <div class="results-header">
+                    <h3>📊 Analysis Results</h3>
+                    <span class="risk-level" id="risk-level"></span>
+                </div>
+                
+                <div class="result-cards" id="result-cards">
+                    <!-- Results will be populated here -->
+                </div>
+
+                <div class="developer-analysis" id="developer-analysis">
+                    <!-- Developer reputation analysis -->
+                </div>
+
+                <div class="wallet-tracking" id="wallet-tracking">
+                    <!-- Wallet tracking results -->
+                </div>
+            </div>
+
+            <div class="snipe-history-section">
+                <div class="section-header">
+                    <h3>⚡ Recent Snipes</h3>
+                    <button id="view-history-btn" class="btn-text-link">View All</button>
+                </div>
+                <div class="snipe-history" id="snipe-history">
+                    <!-- Recent snipe history -->
+                </div>
+            </div>
+
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">🎯</div>
+                <p>Enter a token address, navigate to PumpFun/Bonk, or enable auto-detection to start sniping</p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Tokens Analyzed:</span>
+                    <span class="stat-value" id="analyzed-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Successful Snipes:</span>
+                    <span class="stat-value" id="snipes-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Ruggers Blocked:</span>
+                    <span class="stat-value" id="ruggers-blocked">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Bundles Detected:</span>
+                    <span class="stat-value" id="bundles-count">0</span>
+                </div>
+            </div>
+            <div class="settings">
+                <button id="settings-btn" class="btn-secondary">⚙️ Settings</button>
+                <button id="export-btn" class="btn-secondary">📊 Export</button>
+                <button id="help-btn" class="btn-secondary">❓ Help</button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ SolBuzz Settings</h3>
+                <button class="modal-close" id="close-settings">&times;</button>
+            </div>
+            
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="api">API Keys</button>
+                <button class="tab-btn" data-tab="sniping">Sniping</button>
+                <button class="tab-btn" data-tab="alerts">Alerts</button>
+                <button class="tab-btn" data-tab="advanced">Advanced</button>
+            </div>
+
+            <div class="tab-content active" id="api-tab">
+                <div class="setting-item">
+                    <label for="helius-key">Helius API Key (Recommended):</label>
+                    <input type="password" id="helius-key" placeholder="Enter your Helius API key">
+                    <small>For real-time Solana data and faster token detection</small>
+                </div>
+                <div class="setting-item">
+                    <label for="api-key">BubbleMaps API Key (Optional):</label>
+                    <input type="password" id="api-key" placeholder="Enter your BubbleMaps API key">
+                    <small>For advanced wallet clustering and suspicious activity detection</small>
+                </div>
+                <div class="setting-item">
+                    <label for="birdeye-key">Birdeye API Key (Optional):</label>
+                    <input type="password" id="birdeye-key" placeholder="Enter your Birdeye API key">
+                    <small>For additional price feeds and market data</small>
+                </div>
+            </div>
+
+            <div class="tab-content" id="sniping-tab">
+                <div class="setting-item">
+                    <label for="default-amount">Default Snipe Amount (SOL):</label>
+                    <input type="number" id="default-amount" value="0.1" min="0.01" max="10" step="0.01">
+                </div>
+                <div class="setting-item">
+                    <label for="max-slippage">Max Slippage (%):</label>
+                    <input type="number" id="max-slippage" value="5" min="1" max="50" step="1">
+                </div>
+                <div class="setting-item">
+                    <label for="stop-loss">Stop Loss (%):</label>
+                    <input type="number" id="stop-loss" value="50" min="10" max="90" step="5">
+                </div>
+                <div class="setting-item">
+                    <label for="take-profit">Take Profit (%):</label>
+                    <input type="number" id="take-profit" value="200" min="50" max="1000" step="50">
+                </div>
+                <div class="setting-item">
+                    <label for="max-risk-level">Max Risk Level for Auto-Snipe:</label>
+                    <select id="max-risk-level">
+                        <option value="LOW">Low Risk Only</option>
+                        <option value="MEDIUM" selected>Medium Risk & Below</option>
+                        <option value="HIGH">High Risk & Below</option>
+                        <option value="CRITICAL">All Risk Levels</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tab-content" id="alerts-tab">
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="notifications" checked> Enable browser notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="sound-alerts" checked> Sound alerts for critical events
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="rugger-notifications" checked> Critical rugger alerts
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="snipe-notifications" checked> Snipe success/failure notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="price-alerts"> Price movement alerts
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="advanced-tab">
+                <div class="setting-item">
+                    <label for="monitoring-interval">Monitoring Interval (seconds):</label>
+                    <input type="number" id="monitoring-interval" value="2" min="1" max="10" step="1">
+                    <small>Lower values = faster detection but more resource usage</small>
+                </div>
+                <div class="setting-item">
+                    <label for="max-market-cap">Max Market Cap for Auto-Monitor ($):</label>
+                    <input type="number" id="max-market-cap" value="10000000" min="100000" step="100000">
+                </div>
+                <div class="setting-item">
+                    <label for="min-liquidity">Min Liquidity for Auto-Snipe ($):</label>
+                    <input type="number" id="min-liquidity" value="10000" min="1000" step="1000">
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="debug-mode"> Debug mode (for developers)
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="save-settings" class="btn-primary">💾 Save Settings</button>
+                <button id="reset-settings" class="btn-secondary">🔄 Reset to Defaults</button>
+                <button id="cancel-settings" class="btn-secondary">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 
